@@ -1,3 +1,8 @@
+// ═══════════════════════════════════════════════════════════════
+// URL del backend de Uzeed en Coolify.
+// Esta URL se "quema" en el build. NO necesita .env en el celular.
+// Si cambias el dominio del API, cambialo aquí y recompila.
+// ═══════════════════════════════════════════════════════════════
 const API_BASE = import.meta.env.VITE_API_URL || 'https://api.uzeed.cl';
 
 type RequestOptions = {
@@ -57,4 +62,4 @@ export const api = {
     request<T>(path, { method: 'POST', body: formData }),
 };
 
-export { ApiError };
+export { ApiError, API_BASE };
