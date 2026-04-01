@@ -1,5 +1,23 @@
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
+
+// Push notifications are disabled until Firebase is configured.
+// To enable:
+// 1. Create a project at https://console.firebase.google.com
+// 2. Download google-services.json
+// 3. Place it in android/app/google-services.json
+// 4. Uncomment the code below and remove the empty function
+
+export function usePushNotifications() {
+  // No-op until Firebase is configured.
+  // PushNotifications.register() crashes the Android app with
+  // "Default FirebaseApp is not initialized" if google-services.json
+  // is missing — and the crash happens in native Java, so JS try/catch
+  // cannot prevent it.
+}
+
+/*
+// Uncomment once google-services.json is in place:
 import { PushNotifications } from '@capacitor/push-notifications';
 
 export function usePushNotifications() {
@@ -7,40 +25,31 @@ export function usePushNotifications() {
     if (!Capacitor.isNativePlatform()) return;
 
     const setup = async () => {
-      try {
-        const permission = await PushNotifications.requestPermissions();
-        if (permission.receive !== 'granted') return;
+      const permission = await PushNotifications.requestPermissions();
+      if (permission.receive !== 'granted') return;
 
-        await PushNotifications.register();
+      await PushNotifications.register();
 
-        PushNotifications.addListener('registration', (token) => {
-          console.log('[Push] Token:', token.value);
-          // TODO: Send token to backend for push delivery
-        });
+      PushNotifications.addListener('registration', (token) => {
+        console.log('[Push] Token:', token.value);
+        // TODO: Send token to backend for push delivery
+      });
 
-        PushNotifications.addListener('registrationError', (err) => {
-          console.error('[Push] Registration error:', err);
-        });
+      PushNotifications.addListener('registrationError', (err) => {
+        console.error('[Push] Registration error:', err);
+      });
 
-        PushNotifications.addListener('pushNotificationReceived', (notification) => {
-          console.log('[Push] Received:', notification);
-        });
+      PushNotifications.addListener('pushNotificationReceived', (notification) => {
+        console.log('[Push] Received:', notification);
+      });
 
-        PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-          console.log('[Push] Action:', action);
-          // TODO: Navigate based on notification data
-        });
-      } catch (err) {
-        // Firebase not configured — skip push setup silently.
-        // Push will work once google-services.json is added.
-        console.warn('[Push] Setup skipped (Firebase not configured):', err);
-      }
+      PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+        console.log('[Push] Action:', action);
+      });
     };
 
     setup();
-
-    return () => {
-      PushNotifications.removeAllListeners();
-    };
+    return () => { PushNotifications.removeAllListeners(); };
   }, []);
 }
+*/
