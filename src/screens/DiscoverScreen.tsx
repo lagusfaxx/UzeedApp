@@ -47,8 +47,8 @@ export function DiscoverScreen() {
     );
   }, [profiles, search]);
 
-  const handleCardClick = (id: string) => {
-    navigate(`/profesional/${id}`);
+  const handleCardClick = (username: string) => {
+    navigate(`/profesional/${username}`);
   };
 
   return (
@@ -110,7 +110,7 @@ export function DiscoverScreen() {
             {filtered.map((profile) => (
               <button
                 key={profile.id}
-                onClick={() => handleCardClick(profile.id)}
+                onClick={() => handleCardClick(profile.username)}
                 className="bg-surface rounded-2xl overflow-hidden text-left transition-colors hover:bg-surface-light group"
               >
                 {/* Cover */}

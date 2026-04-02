@@ -5,7 +5,7 @@ import { api, API_BASE } from '@/lib/api';
 import type { User } from '@/lib/types';
 import {
   LogOut, Camera, Save, MapPin, Phone, Mail, Briefcase,
-  Edit3, X, Shield, Eye, Clock, Star, Image, Plus, Trash2,
+  Edit3, X, Shield, Image, Plus, Trash2,
   Video, ChevronRight, FileText, AlertTriangle
 } from 'lucide-react';
 import { Camera as CapCamera, CameraResultType, CameraSource } from '@capacitor/camera';
@@ -110,13 +110,12 @@ export function ProfileScreen() {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
-        input.multiple = true;
-        const files = await new Promise<FileList | null>((resolve) => {
-          input.onchange = () => resolve(input.files);
+        const file = await new Promise<File | null>((resolve) => {
+          input.onchange = () => resolve(input.files?.[0] || null);
           input.click();
         });
-        if (!files || !files.length) return;
-        blob = files[0];
+        if (!file) return;
+        blob = file;
       }
       const fd = new FormData();
       fd.append('files', blob, 'photo.jpg');
@@ -187,12 +186,11 @@ export function ProfileScreen() {
             </div>
           </div>
 
-          {/* Stats row — professionals only */}
-          {isPro && profile && (
-            <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-border">
-              <StatMini icon={Eye} label="Visitas" value={(profile as any).profileViews ?? 0} />
-              <StatMini icon={Star} label="Servicios" value={(profile as any).completedServices ?? 0} />
-              <StatMini icon={Clock} label="Resp. prom." value={`${(profile as any).avgResponseMinutes ?? '—'}m`} />
+          {/* Verified badge */}
+          {displayUser?.isVerified && (
+            <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
+              <Shield size={14} className="text-primary" />
+              <span className="text-xs text-primary-light font-medium">Cuenta verificada</span>
             </div>
           )}
         </div>
@@ -348,16 +346,6 @@ export function ProfileScreen() {
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function StatMini({ icon: Icon, label, value }: { icon: any; label: string; value: string | number }) {
-  return (
-    <div className="text-center">
-      <Icon size={14} className="text-neutral-500 mx-auto mb-1" />
-      <p className="text-sm font-bold">{value}</p>
-      <p className="text-[10px] text-neutral-500">{label}</p>
     </div>
   );
 }

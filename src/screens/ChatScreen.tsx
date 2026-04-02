@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
@@ -87,7 +87,7 @@ export function ChatConversation() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     if (!userId) return;
     try {
       const data = await api.get<{ messages: Message[]; other: any }>(`/messages/${userId}`);
@@ -96,14 +96,13 @@ export function ChatConversation() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchMessages();
-    // Poll for new messages every 5 seconds
     pollRef.current = setInterval(fetchMessages, 5000);
     return () => clearInterval(pollRef.current);
-  }, [userId]);
+  }, [fetchMessages]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

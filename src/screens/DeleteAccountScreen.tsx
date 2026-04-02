@@ -18,17 +18,25 @@ export function DeleteAccountScreen() {
     setError('');
     setLoading(true);
     try {
+      // Verify password by attempting login first
+      await api.post('/auth/login', {
+        email: user?.email,
+        password: password,
+      });
+      // Password verified - proceed with deletion request
       await api.post('/privacy/request-deletion', {
         type: 'account',
         email: user?.email || '',
-        message: 'Solicitud desde la app móvil',
+        message: 'Solicitud verificada desde la app móvil',
       });
       setDone(true);
-      setTimeout(async () => {
-        await logout();
+      setTimeout(() => {
+        logout().catch(() => {});
       }, 3000);
-    } catch {
-      setError('Error al procesar la solicitud. Intenta de nuevo.');
+    } catch (err: any) {
+      const code = err?.code || err?.message || '';
+      if (code === 'INVALID_CREDENTIALS') setError('Contraseña incorrecta');
+      else setError('Error al procesar la solicitud. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
