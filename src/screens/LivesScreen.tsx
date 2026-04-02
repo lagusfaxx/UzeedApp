@@ -23,7 +23,7 @@ export function LivesScreen() {
         const data = await api.get<{ streams: LiveStream[] }>('/live/active');
         setStreams(data.streams || []);
       } else {
-        const data = await api.get<{ bookings: VideocallBooking[] }>('/videocall/my-bookings');
+        const data = await api.get<{ bookings: VideocallBooking[] }>('/videocall/bookings');
         setBookings(data.bookings || []);
       }
     } catch {

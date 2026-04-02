@@ -14,6 +14,8 @@ import { VideocallScreen } from '@/screens/VideocallScreen';
 import { DiscoverScreen } from '@/screens/DiscoverScreen';
 import { ProfessionalViewScreen } from '@/screens/ProfessionalViewScreen';
 import { VideocallConfigScreen } from '@/screens/VideocallConfigScreen';
+import { BuyTokensScreen } from '@/screens/BuyTokensScreen';
+import { BookVideocallScreen } from '@/screens/BookVideocallScreen';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -40,6 +42,8 @@ function AppRoutes() {
       <Route path="/chat/:userId" element={<ChatConversation />} />
       <Route path="/profesional/:username" element={<ProfessionalViewScreen />} />
       <Route path="/videocall-config" element={<VideocallConfigScreen />} />
+      <Route path="/comprar-tokens" element={<BuyTokensScreen />} />
+      <Route path="/agendar/:professionalId" element={<BookVideocallScreen />} />
       <Route path="/lives/watch/:streamId" element={<LiveWatchScreen />} />
       <Route path="/lives/broadcast" element={<BroadcastScreen />} />
       <Route path="/lives/call/:bookingId" element={<VideocallScreen />} />
