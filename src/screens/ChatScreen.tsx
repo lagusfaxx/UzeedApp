@@ -109,10 +109,11 @@ export function ChatConversation() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!text.trim() || sending) return;
+    const sanitized = text.trim().slice(0, 2000);
+    if (!sanitized || sending) return;
     setSending(true);
     try {
-      await api.post(`/messages/${userId}`, { body: text.trim() });
+      await api.post(`/messages/${userId}`, { body: sanitized });
       setText('');
       await fetchMessages();
     } finally {
@@ -154,7 +155,8 @@ export function ChatConversation() {
           messages.map((msg) => {
             const mine = msg.fromId === me?.id;
             const isImage = msg.body.startsWith('ATTACHMENT_IMAGE:');
-            const imageUrl = isImage ? msg.body.replace('ATTACHMENT_IMAGE:', '') : null;
+            const rawUrl = isImage ? msg.body.replace('ATTACHMENT_IMAGE:', '') : null;
+            const imageUrl = rawUrl && /^https:\/\//.test(rawUrl) ? rawUrl : null;
 
             return (
               <div key={msg.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>

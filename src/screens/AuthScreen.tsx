@@ -26,8 +26,8 @@ export function AuthScreen() {
           setLoading(false);
           return;
         }
-        if (password.length < 6) {
-          setError('La contraseña debe tener al menos 6 caracteres');
+        if (password.length < 8) {
+          setError('La contraseña debe tener al menos 8 caracteres');
           setLoading(false);
           return;
         }
@@ -51,7 +51,7 @@ export function AuthScreen() {
 
   const isValid = mode === 'login'
     ? email.length > 0 && password.length > 0
-    : email.length > 0 && password.length >= 6 && displayName.trim().length > 0;
+    : email.length > 0 && password.length >= 8 && displayName.trim().length > 0;
 
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col safe-top safe-bottom">
@@ -122,7 +122,7 @@ export function AuthScreen() {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={mode === 'register' ? 'Contraseña (mín. 6 caracteres)' : 'Contraseña'}
+              placeholder={mode === 'register' ? 'Contraseña (mín. 8 caracteres)' : 'Contraseña'}
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               className="w-full bg-surface/80 backdrop-blur-sm border border-white/[0.06] rounded-2xl pl-12 pr-12 py-4 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 focus:bg-surface transition-all"
             />

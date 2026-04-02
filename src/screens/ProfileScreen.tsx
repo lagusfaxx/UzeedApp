@@ -89,8 +89,8 @@ export function ProfileScreen() {
       await api.upload('/profile/avatar', fd);
       await refresh();
       await fetchProfile();
-    } catch (err) {
-      console.error('Avatar upload failed:', err);
+    } catch {
+      // Upload failed silently
     }
   };
 
@@ -122,8 +122,8 @@ export function ProfileScreen() {
       fd.append('files', blob, 'photo.jpg');
       await api.upload('/profile/media', fd);
       await fetchProfile();
-    } catch (err) {
-      console.error('Media upload failed:', err);
+    } catch {
+      // Upload failed silently
     }
   };
 

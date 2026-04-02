@@ -26,9 +26,13 @@ class ApiError extends Error {
 async function request<T = unknown>(path: string, opts: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, headers = {} } = opts;
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000);
+
   const config: RequestInit = {
     method,
     credentials: 'include',
+    signal: controller.signal,
     headers: {
       'Accept': 'application/json',
       ...headers,
@@ -42,14 +46,18 @@ async function request<T = unknown>(path: string, opts: RequestOptions = {}): Pr
     config.body = body;
   }
 
-  const res = await fetch(`${API_BASE}${path}`, config);
+  try {
+    const res = await fetch(`${API_BASE}${path}`, config);
 
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({ error: 'UNKNOWN' }));
-    throw new ApiError(res.status, data.error || 'UNKNOWN', data.message);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({ error: 'UNKNOWN' }));
+      throw new ApiError(res.status, data.error || 'UNKNOWN', data.message);
+    }
+
+    return res.json();
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return res.json();
 }
 
 export const api = {
