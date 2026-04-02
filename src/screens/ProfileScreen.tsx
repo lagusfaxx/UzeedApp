@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { api } from '@/lib/api';
+import { api, API_BASE } from '@/lib/api';
 import type { User } from '@/lib/types';
 import {
   LogOut, Camera, Save, MapPin, Phone, Mail, Briefcase,
   Edit3, X, Shield, Eye, Clock, Star, Image, Plus, Trash2,
-  Video, ChevronRight, Settings, FileText, AlertTriangle
+  Video, ChevronRight, FileText, AlertTriangle
 } from 'lucide-react';
 import { Camera as CapCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
@@ -319,7 +319,7 @@ export function ProfileScreen() {
         {/* Account & Legal section */}
         <div className="bg-surface rounded-2xl divide-y divide-border">
           <a
-            href="https://api.uzeed.cl/legal/privacidad"
+            href={`${API_BASE}/legal/privacidad`}
             target="_blank"
             rel="noopener"
             className="flex items-center gap-3 px-4 py-3.5"
@@ -329,7 +329,7 @@ export function ProfileScreen() {
             <ChevronRight size={14} className="text-neutral-600" />
           </a>
           <a
-            href="https://api.uzeed.cl/legal/terminos"
+            href={`${API_BASE}/legal/terminos`}
             target="_blank"
             rel="noopener"
             className="flex items-center gap-3 px-4 py-3.5"

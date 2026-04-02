@@ -238,11 +238,11 @@ export function BookVideocallScreen() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white pb-10">
       {/* ── Header ── */}
-      <div className="sticky top-0 z-10 bg-neutral-950/80 backdrop-blur-lg border-b border-[#262626]">
+      <div className="sticky top-0 z-10 bg-neutral-950/80 backdrop-blur-lg border-b border-border">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-xl hover:bg-[#141414] transition-colors"
+            className="p-2 rounded-xl hover:bg-surface transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-400" />
           </button>
@@ -253,11 +253,11 @@ export function BookVideocallScreen() {
 
       <div className="px-4 py-6 space-y-5 max-w-lg mx-auto">
         {/* ── Professional info ── */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 flex items-center gap-4">
+        <div className="bg-surface border border-border rounded-2xl p-4 flex items-center gap-4">
           <img
             src={professional.avatarUrl}
             alt={professional.displayName}
-            className="w-14 h-14 rounded-full object-cover border-2 border-[#262626]"
+            className="w-14 h-14 rounded-full object-cover border-2 border-border"
           />
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-base truncate">{professional.displayName}</p>
@@ -270,7 +270,7 @@ export function BookVideocallScreen() {
         </div>
 
         {/* ── Duration selector ── */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-3">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm text-neutral-400">
             <Clock className="w-4 h-4" />
             <span>Duración</span>
@@ -284,7 +284,7 @@ export function BookVideocallScreen() {
                 className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
                   duration === step
                     ? 'bg-primary text-white'
-                    : 'bg-neutral-950 border border-[#262626] text-neutral-400 hover:border-primary/50'
+                    : 'bg-neutral-950 border border-border text-neutral-400 hover:border-primary/50'
                 }`}
               >
                 {step} min
@@ -294,7 +294,7 @@ export function BookVideocallScreen() {
         </div>
 
         {/* ── Day selector ── */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-3">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm text-neutral-400">
             <Calendar className="w-4 h-4" />
             <span>Fecha</span>
@@ -314,7 +314,7 @@ export function BookVideocallScreen() {
                   className={`flex flex-col items-center shrink-0 w-16 py-2.5 rounded-xl transition-colors ${
                     isSelected
                       ? 'bg-primary text-white'
-                      : 'bg-neutral-950 border border-[#262626] text-neutral-400 hover:border-primary/50'
+                      : 'bg-neutral-950 border border-border text-neutral-400 hover:border-primary/50'
                   }`}
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-wider">
@@ -333,7 +333,7 @@ export function BookVideocallScreen() {
         </div>
 
         {/* ── Time slots ── */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-3">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm text-neutral-400">
             <Clock className="w-4 h-4" />
             <span>Hora disponible</span>
@@ -367,7 +367,7 @@ export function BookVideocallScreen() {
                         ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed line-through'
                         : isSelected
                           ? 'bg-primary text-white'
-                          : 'bg-neutral-950 border border-[#262626] text-neutral-400 hover:border-primary/50'
+                          : 'bg-neutral-950 border border-border text-neutral-400 hover:border-primary/50'
                     }`}
                   >
                     {minutesToHm(slot)}

@@ -103,11 +103,11 @@ export function VideocallConfigScreen() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-neutral-950/80 backdrop-blur-lg border-b border-[#262626]">
+      <div className="sticky top-0 z-10 bg-neutral-950/80 backdrop-blur-lg border-b border-border">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate('/perfil')}
-            className="p-2 rounded-xl hover:bg-[#141414] transition-colors"
+            className="p-2 rounded-xl hover:bg-surface transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-400" />
           </button>
@@ -118,7 +118,7 @@ export function VideocallConfigScreen() {
 
       <div className="px-4 py-6 space-y-5 max-w-lg mx-auto">
         {/* Summary card */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4">
+        <div className="bg-surface border border-border rounded-2xl p-4">
           <p className="text-sm text-neutral-400 mb-1">Resumen actual</p>
           <p className="text-base font-medium">
             {form.pricePerMinute} tokens/min &middot; {form.minDurationMin}-{form.maxDurationMin} min &middot;{' '}
@@ -129,7 +129,7 @@ export function VideocallConfigScreen() {
         </div>
 
         {/* Price per minute */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-2">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-2">
           <label className="flex items-center gap-2 text-sm text-neutral-400">
             <DollarSign className="w-4 h-4" />
             Precio por minuto (tokens)
@@ -140,14 +140,14 @@ export function VideocallConfigScreen() {
             max={10000}
             value={form.pricePerMinute}
             onChange={(e) => updateField('pricePerMinute', Number(e.target.value))}
-            className="w-full bg-neutral-950 border border-[#262626] rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
+            className="w-full bg-neutral-950 border border-border rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
             placeholder="100"
           />
           <p className="text-xs text-neutral-600">Entre 1 y 10.000 tokens</p>
         </div>
 
         {/* Min duration */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-2">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-2">
           <label className="flex items-center gap-2 text-sm text-neutral-400">
             <Clock className="w-4 h-4" />
             Duración mínima (minutos)
@@ -158,14 +158,14 @@ export function VideocallConfigScreen() {
             max={120}
             value={form.minDurationMin}
             onChange={(e) => updateField('minDurationMin', Number(e.target.value))}
-            className="w-full bg-neutral-950 border border-[#262626] rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
+            className="w-full bg-neutral-950 border border-border rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
             placeholder="5"
           />
           <p className="text-xs text-neutral-600">Entre 1 y 120 minutos</p>
         </div>
 
         {/* Max duration */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-2">
+        <div className="bg-surface border border-border rounded-2xl p-4 space-y-2">
           <label className="flex items-center gap-2 text-sm text-neutral-400">
             <Clock className="w-4 h-4" />
             Duración máxima (minutos)
@@ -176,14 +176,14 @@ export function VideocallConfigScreen() {
             max={180}
             value={form.maxDurationMin}
             onChange={(e) => updateField('maxDurationMin', Number(e.target.value))}
-            className="w-full bg-neutral-950 border border-[#262626] rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
+            className="w-full bg-neutral-950 border border-border rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-primary transition-colors"
             placeholder="60"
           />
           <p className="text-xs text-neutral-600">Entre 1 y 180 minutos</p>
         </div>
 
         {/* Active toggle */}
-        <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4">
+        <div className="bg-surface border border-border rounded-2xl p-4">
           <button
             type="button"
             onClick={() => updateField('isActive', !form.isActive)}

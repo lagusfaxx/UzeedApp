@@ -71,7 +71,7 @@ export function ProfessionalViewScreen() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-950">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#7c3aed] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -82,7 +82,7 @@ export function ProfessionalViewScreen() {
         <p className="text-neutral-400">{error ?? "Perfil no encontrado."}</p>
         <button
           onClick={() => navigate(-1)}
-          className="rounded-lg bg-[#7c3aed] px-4 py-2 text-sm font-medium text-white"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
         >
           Volver
         </button>
@@ -103,7 +103,7 @@ export function ProfessionalViewScreen() {
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="h-full w-full bg-[#141414]" />
+          <div className="h-full w-full bg-surface" />
         )}
 
         {/* Back button overlay */}
@@ -125,7 +125,7 @@ export function ProfessionalViewScreen() {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-[#141414] text-3xl font-bold text-[#7c3aed]">
+            <div className="flex h-full w-full items-center justify-center bg-surface text-3xl font-bold text-primary">
               {profile.displayName?.charAt(0)?.toUpperCase() ?? "?"}
             </div>
           )}
@@ -146,7 +146,7 @@ export function ProfessionalViewScreen() {
 
         {/* Service category badge */}
         {profile.serviceCategory && (
-          <span className="mt-3 inline-block rounded-full bg-[#7c3aed]/15 px-3 py-1 text-xs font-medium text-[#7c3aed]">
+          <span className="mt-3 inline-block rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
             {profile.serviceCategory}
           </span>
         )}
@@ -160,7 +160,7 @@ export function ProfessionalViewScreen() {
 
         {/* Service description */}
         {profile.serviceDescription && (
-          <div className="mt-4 rounded-xl border border-[#262626] bg-[#141414] p-4">
+          <div className="mt-4 rounded-xl border border-border bg-surface p-4">
             <p className="text-sm leading-relaxed text-neutral-300">
               {profile.serviceDescription}
             </p>
@@ -171,14 +171,14 @@ export function ProfessionalViewScreen() {
         {gallery.length > 0 && (
           <div className="mt-6">
             <div className="mb-3 flex items-center gap-2">
-              <Image className="h-4 w-4 text-[#7c3aed]" />
+              <Image className="h-4 w-4 text-primary" />
               <h2 className="text-base font-semibold text-white">Galeria</h2>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               {gallery.map((item) => (
                 <div
                   key={item.id}
-                  className="relative aspect-square overflow-hidden rounded-lg bg-[#141414]"
+                  className="relative aspect-square overflow-hidden rounded-lg bg-surface"
                 >
                   {item.type === "IMAGE" ? (
                     <img
@@ -208,7 +208,7 @@ export function ProfessionalViewScreen() {
         <div className="mt-8 flex flex-col gap-3">
           <button
             onClick={() => navigate(`/chat/${profile.id}`)}
-            className="flex items-center justify-center gap-2 rounded-xl bg-[#7c3aed] py-3 text-sm font-semibold text-white active:opacity-80"
+            className="flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-white active:opacity-80"
           >
             <MessageCircle className="h-5 w-5" />
             Enviar mensaje
@@ -216,9 +216,9 @@ export function ProfessionalViewScreen() {
 
           <button
             onClick={() => navigate(`/agendar/${profile.id}`)}
-            className="flex items-center justify-center gap-2 rounded-xl border border-[#262626] bg-[#141414] py-3 text-sm font-semibold text-white active:opacity-80"
+            className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface py-3 text-sm font-semibold text-white active:opacity-80"
           >
-            <Video className="h-5 w-5 text-[#7c3aed]" />
+            <Video className="h-5 w-5 text-primary" />
             Agendar videollamada
           </button>
 

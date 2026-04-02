@@ -13,6 +13,7 @@ export function ChatInbox() {
   useEffect(() => {
     api.get<{ conversations: Conversation[] }>('/messages/inbox')
       .then(({ conversations }) => setConversations(conversations))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -166,7 +167,7 @@ export function ChatConversation() {
                     : 'bg-surface-light text-white rounded-bl-md'
                 }`}>
                   {isImage && imageUrl ? (
-                    <img src={imageUrl} alt="" className="rounded-lg max-w-full max-h-60 object-cover" />
+                    <img src={imageUrl} alt="Imagen adjunta" className="rounded-lg max-w-full max-h-60 object-cover" />
                   ) : (
                     <p className="text-sm leading-relaxed break-words">{msg.body}</p>
                   )}

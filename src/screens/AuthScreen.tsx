@@ -196,7 +196,7 @@ export function AuthScreen() {
         autoComplete={autoComplete}
         autoCapitalize={type === 'email' ? 'off' : 'sentences'}
         maxLength={maxLength}
-        className="w-full bg-[#141414] border border-[#262626] rounded-2xl pl-12 pr-12 py-4 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 transition-all"
+        className="w-full bg-surface border border-border rounded-2xl pl-12 pr-12 py-4 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 transition-all"
       />
       {right && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -316,7 +316,7 @@ export function AuthScreen() {
 
       {/* Progress bar */}
       <div className="px-5 mb-6">
-        <div className="h-1 bg-[#1c1c1c] rounded-full overflow-hidden">
+        <div className="h-1 bg-surface-light rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-primary to-violet-500 rounded-full transition-all duration-300"
             style={{ width: `${(step / totalSteps) * 100}%` }}
@@ -497,7 +497,7 @@ export function AuthScreen() {
                         className={`py-2.5 rounded-xl text-sm font-medium transition-all border ${
                           form.gender === g.value
                             ? 'bg-primary/15 border-primary text-white'
-                            : 'bg-[#141414] border-[#262626] text-neutral-400'
+                            : 'bg-surface border-border text-neutral-400'
                         }`}
                       >
                         {g.label}
@@ -516,7 +516,7 @@ export function AuthScreen() {
                     value={form.birthdate}
                     onChange={(e) => updateForm({ birthdate: e.target.value })}
                     max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-                    className="w-full bg-[#141414] border border-[#262626] rounded-2xl pl-12 pr-4 py-4 text-white text-[15px] focus:outline-none focus:border-primary/50 transition-all [color-scheme:dark]"
+                    className="w-full bg-surface border border-border rounded-2xl pl-12 pr-4 py-4 text-white text-[15px] focus:outline-none focus:border-primary/50 transition-all [color-scheme:dark]"
                   />
                 </div>
 
@@ -541,7 +541,7 @@ export function AuthScreen() {
                     rows={3}
                     maxLength={1000}
                     placeholder="Describe tu perfil profesional (mín. 20 caracteres)"
-                    className="w-full bg-[#141414] border border-[#262626] rounded-2xl px-4 py-3.5 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 resize-none transition-all"
+                    className="w-full bg-surface border border-border rounded-2xl px-4 py-3.5 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 resize-none transition-all"
                   />
                   <p className="text-[11px] text-neutral-600 mt-1 text-right">
                     {form.bio.length}/1000
@@ -562,12 +562,12 @@ export function AuthScreen() {
             )}
 
             {/* Terms acceptance */}
-            <label className="flex items-start gap-3 cursor-pointer bg-[#141414] border border-[#262626] rounded-2xl p-4">
+            <label className="flex items-start gap-3 cursor-pointer bg-surface border border-border rounded-2xl p-4">
               <input
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => { setTermsAccepted(e.target.checked); setError(''); }}
-                className="mt-0.5 w-5 h-5 rounded accent-primary bg-[#0a0a0a] border-[#262626]"
+                className="mt-0.5 w-5 h-5 rounded accent-primary bg-neutral-950 border-border"
               />
               <span className="text-sm text-neutral-300 leading-relaxed">
                 Acepto los{' '}
@@ -592,7 +592,7 @@ export function AuthScreen() {
             </label>
 
             {/* Account summary */}
-            <div className="bg-[#141414] border border-[#262626] rounded-2xl p-4 space-y-2">
+            <div className="bg-surface border border-border rounded-2xl p-4 space-y-2">
               <p className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold">
                 Resumen de tu cuenta
               </p>
@@ -654,7 +654,7 @@ function ProfileTypeCard({ selected, onClick, title, desc }: {
       className={`text-left p-4 rounded-2xl border-2 transition-all ${
         selected
           ? 'border-primary bg-primary/10'
-          : 'border-[#262626] bg-[#141414]'
+          : 'border-border bg-surface'
       }`}
     >
       <p className={`font-semibold text-sm ${selected ? 'text-white' : 'text-neutral-300'}`}>

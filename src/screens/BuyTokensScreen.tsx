@@ -117,14 +117,14 @@ export function BuyTokensScreen() {
                 <button
                   key={pkg.tokens}
                   onClick={() => setSelected(pkg)}
-                  className={`relative bg-[#141414] rounded-2xl p-4 text-left transition-all duration-150 border-2 ${
+                  className={`relative bg-surface rounded-2xl p-4 text-left transition-all duration-150 border-2 ${
                     isSelected
-                      ? 'border-[#7c3aed] shadow-lg shadow-primary/10'
-                      : 'border-[#262626] hover:border-neutral-600'
+                      ? 'border-primary shadow-lg shadow-primary/10'
+                      : 'border-border hover:border-neutral-600'
                   }`}
                 >
                   {isSelected && (
-                    <div className="absolute top-2.5 right-2.5 w-5 h-5 bg-[#7c3aed] rounded-full flex items-center justify-center">
+                    <div className="absolute top-2.5 right-2.5 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                       <Check size={12} className="text-white" />
                     </div>
                   )}
@@ -157,7 +157,7 @@ export function BuyTokensScreen() {
           <button
             onClick={handleBuy}
             disabled={buying}
-            className="w-full bg-gradient-to-r from-[#7c3aed] to-violet-500 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 transition-opacity disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-primary to-violet-500 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 transition-opacity disabled:opacity-50"
           >
             {buying ? (
               <>
