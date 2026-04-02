@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Eye, EyeOff, ArrowRight, ArrowLeft, User, Mail, Lock,
-  Phone, MapPin, AtSign, Calendar, FileText, CheckCircle2,
+  Phone, MapPin, AtSign, Calendar, FileText, CheckCircle2, ShieldCheck,
 } from 'lucide-react';
-import { API_BASE } from '@/lib/api';
+import { API_BASE, api } from '@/lib/api';
 
 type ProfileType = 'CLIENT' | 'PROFESSIONAL';
 
@@ -51,6 +51,13 @@ export function AuthScreen() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showRegPassword, setShowRegPassword] = useState(false);
 
+  // Email verification
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [codeSent, setCodeSent] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   // Shared
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -88,7 +95,7 @@ export function AuthScreen() {
     form.password.length >= 8 &&
     /^\+56 9\d{4} ?\d{4}$/.test(form.phone.replace(/\s+/g, ' ').trim());
 
-  const isStep3Valid = form.profileType === 'CLIENT'
+  const isStep4Valid = form.profileType === 'CLIENT'
     ? termsAccepted
     : termsAccepted &&
       form.gender !== '' &&
@@ -96,9 +103,71 @@ export function AuthScreen() {
       form.bio.trim().length >= 20 &&
       form.city.trim().length >= 2;
 
-  const totalSteps = form.profileType === 'PROFESSIONAL' ? 3 : 3;
+  const totalSteps = 4;
 
-  const handleNextStep = () => {
+  const startCooldown = (seconds: number) => {
+    setCooldown(seconds);
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+    cooldownRef.current = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    return () => { if (cooldownRef.current) clearInterval(cooldownRef.current); };
+  }, []);
+
+  const handleSendCode = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await api.post('/auth/verification/send-code', {
+        email: form.email.trim().toLowerCase(),
+      });
+      setCodeSent(true);
+      startCooldown(120);
+    } catch (err: any) {
+      const code = err?.code || err?.message || '';
+      if (code === 'COOLDOWN') setError('Espera antes de reenviar el código');
+      else if (code === 'EMAIL_IN_USE') setError('Este email ya está registrado');
+      else setError('Error al enviar el código. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    if (verificationCode.length !== 6) {
+      setError('El código debe tener 6 dígitos');
+      return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      await api.post('/auth/verification/verify-code', {
+        email: form.email.trim().toLowerCase(),
+        code: verificationCode,
+      });
+      setEmailVerified(true);
+      setStep(4);
+    } catch (err: any) {
+      const code = err?.code || err?.message || '';
+      if (code === 'INVALID_CODE') setError('Código incorrecto');
+      else if (code === 'CODE_EXPIRED') setError('El código ha expirado. Solicita uno nuevo.');
+      else if (code === 'MAX_ATTEMPTS') setError('Demasiados intentos. Solicita un nuevo código.');
+      else setError('Error al verificar. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNextStep = async () => {
     setError('');
     if (step === 1 && !isStep1Valid) {
       if (form.displayName.trim().length < 2) setError('Nombre debe tener al menos 2 caracteres');
@@ -112,16 +181,56 @@ export function AuthScreen() {
       else setError('Teléfono debe ser formato +56 9XXXX XXXX');
       return;
     }
+    // When leaving step 2, send verification code and go to step 3 (verification)
+    if (step === 2) {
+      if (emailVerified) {
+        setStep(4);
+        return;
+      }
+      setLoading(true);
+      setError('');
+      try {
+        await api.post('/auth/verification/send-code', {
+          email: form.email.trim().toLowerCase(),
+        });
+        setCodeSent(true);
+        startCooldown(120);
+        setStep(3);
+      } catch (err: any) {
+        const code = err?.code || err?.message || '';
+        if (code === 'COOLDOWN') {
+          // Code was already sent, just go to verification step
+          setStep(3);
+        } else if (code === 'EMAIL_IN_USE') {
+          setError('Este email ya está registrado');
+        } else {
+          setError('Error al enviar el código. Intenta de nuevo.');
+        }
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
     setStep((s) => Math.min(s + 1, totalSteps));
   };
 
   const handlePrevStep = () => {
     setError('');
+    if (step === 4) {
+      // Skip back to step 2 (credentials) — verification already done
+      setStep(2);
+      return;
+    }
+    if (step === 3) {
+      // Go back to credentials
+      setStep(2);
+      return;
+    }
     setStep((s) => Math.max(s - 1, 1));
   };
 
   const handleRegister = async () => {
-    if (!isStep3Valid) {
+    if (!isStep4Valid) {
       if (!termsAccepted) setError('Debes aceptar los términos de servicio');
       else if (form.profileType === 'PROFESSIONAL') {
         if (!form.gender) setError('Selecciona tu género');
@@ -173,6 +282,10 @@ export function AuthScreen() {
     setStep(1);
     setForm(INITIAL_FORM);
     setTermsAccepted(false);
+    setEmailVerified(false);
+    setVerificationCode('');
+    setCodeSent(false);
+    setCooldown(0);
   };
 
   // ── Render LOGIN ──
@@ -427,16 +540,90 @@ export function AuthScreen() {
 
             <button
               onClick={handleNextStep}
-              className="w-full bg-gradient-to-r from-primary to-violet-500 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 shadow-lg shadow-primary/20"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-primary to-violet-500 disabled:from-neutral-800 disabled:to-neutral-800 disabled:text-neutral-500 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 shadow-lg shadow-primary/20 disabled:shadow-none"
             >
-              Siguiente
-              <ArrowRight size={18} />
+              {loading ? <Spinner /> : (
+                <>
+                  Siguiente
+                  <ArrowRight size={18} />
+                </>
+              )}
             </button>
           </div>
         )}
 
-        {/* ── STEP 3: Profile details + Terms ── */}
+        {/* ── STEP 3: Email Verification ── */}
         {step === 3 && (
+          <div className="space-y-5">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center mb-4">
+                <ShieldCheck size={32} className="text-primary" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">Verifica tu email</h2>
+              <p className="text-neutral-500 text-sm mt-2 max-w-[280px]">
+                Enviamos un código de 6 dígitos a{' '}
+                <span className="text-white font-medium">{form.email}</span>
+              </p>
+            </div>
+
+            {/* 6-digit code input */}
+            <div className="flex justify-center">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={verificationCode}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setVerificationCode(v);
+                  setError('');
+                }}
+                placeholder="000000"
+                className="w-56 bg-surface border border-border rounded-2xl px-4 py-5 text-white text-center text-3xl font-bold tracking-[0.5em] placeholder:text-neutral-700 focus:outline-none focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            {error && <ErrorBanner message={error} />}
+
+            <button
+              onClick={handleVerifyCode}
+              disabled={loading || verificationCode.length !== 6}
+              className="w-full bg-gradient-to-r from-primary to-violet-500 disabled:from-neutral-800 disabled:to-neutral-800 disabled:text-neutral-500 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 shadow-lg shadow-primary/20 disabled:shadow-none"
+            >
+              {loading ? <Spinner /> : (
+                <>
+                  <ShieldCheck size={18} />
+                  Verificar código
+                </>
+              )}
+            </button>
+
+            {/* Resend */}
+            <div className="text-center">
+              {cooldown > 0 ? (
+                <p className="text-neutral-500 text-sm">
+                  Reenviar código en <span className="text-white font-medium">{Math.floor(cooldown / 60)}:{String(cooldown % 60).padStart(2, '0')}</span>
+                </p>
+              ) : (
+                <button
+                  onClick={handleSendCode}
+                  disabled={loading}
+                  className="text-primary-light font-semibold text-sm"
+                >
+                  Reenviar código
+                </button>
+              )}
+            </div>
+
+            <p className="text-neutral-600 text-xs text-center">
+              Revisa tu bandeja de entrada y carpeta de spam
+            </p>
+          </div>
+        )}
+
+        {/* ── STEP 4: Profile details + Terms ── */}
+        {step === 4 && (
           <div className="space-y-5 pb-8">
             <div>
               <h2 className="text-2xl font-bold text-white">
@@ -571,7 +758,10 @@ export function AuthScreen() {
                 <span className="text-neutral-500">Usuario</span>
                 <span className="text-white">@{form.username || '—'}</span>
                 <span className="text-neutral-500">Email</span>
-                <span className="text-white truncate">{form.email || '—'}</span>
+                <span className="text-white truncate flex items-center gap-1">
+                  {form.email || '—'}
+                  {emailVerified && <ShieldCheck size={14} className="text-success shrink-0" />}
+                </span>
                 <span className="text-neutral-500">Tipo</span>
                 <span className="text-primary-light">
                   {form.profileType === 'PROFESSIONAL' ? 'Profesional' : 'Cliente'}
