@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Eye, EyeOff, ArrowRight, User, Mail, Lock, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, User, Mail, Lock } from 'lucide-react';
 
 export function AuthScreen() {
   const { login, register } = useAuth();
@@ -65,11 +65,12 @@ export function AuthScreen() {
       <div className="flex-1 flex flex-col justify-center px-7 relative z-10">
         {/* Logo + Branding */}
         <div className="mb-10">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center">
-              <Sparkles size={20} className="text-white" />
-            </div>
-            <span className="text-2xl font-bold text-white tracking-tight">Uzeed</span>
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src="/Logo Uzeed Para fondo negro.png"
+              alt="Uzeed"
+              className="w-12 h-12 object-contain"
+            />
           </div>
           <h2 className="text-3xl font-bold text-white leading-tight">
             {mode === 'login' ? 'Bienvenido\nde vuelta' : 'Crea tu\ncuenta'}
