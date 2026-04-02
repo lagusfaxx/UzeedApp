@@ -4,10 +4,10 @@
  * This mapping sanitizes them for display without changing backend data.
  */
 const CATEGORY_MAP: Record<string, string> = {
-  'Escorts': 'Acompañamiento',
-  'escorts': 'Acompañamiento',
-  'Escort': 'Acompañamiento',
-  'escort': 'Acompañamiento',
+  'Escorts': 'Servicios profesionales',
+  'escorts': 'Servicios profesionales',
+  'Escort': 'Servicios profesionales',
+  'escort': 'Servicios profesionales',
   'Masajes eróticos': 'Masajes',
   'masajes eróticos': 'Masajes',
   'Masajes eroticos': 'Masajes',
