@@ -6,7 +6,7 @@ import type { User } from '@/lib/types';
 import {
   LogOut, Camera, Save, MapPin, Phone, Mail, Briefcase,
   Edit3, X, Shield, Image, Plus, Trash2,
-  Video, ChevronRight, FileText, AlertTriangle
+  Video, ChevronRight, FileText, AlertTriangle, Clock, Power
 } from 'lucide-react';
 import { Camera as CapCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
@@ -28,6 +28,8 @@ export function ProfileScreen() {
   });
 
   const isPro = user?.profileType === 'PROFESSIONAL';
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [togglingAvail, setTogglingAvail] = useState(false);
 
   const fetchProfile = useCallback(async () => {
     const { user: u } = await api.get<{ user: User }>('/profile/me');
@@ -40,6 +42,7 @@ export function ProfileScreen() {
       serviceCategory: u.serviceCategory || '',
       serviceDescription: u.serviceDescription || '',
     });
+    setIsAvailable(u.isOnline !== false);
     if (isPro) {
       api.get<{ media: any[] }>('/profile/media')
         .then(({ media }) => setGallery(media))
@@ -205,6 +208,35 @@ export function ProfileScreen() {
           )}
         </div>
 
+        {/* Availability toggle — professionals only */}
+        {isPro && (
+          <div className="bg-surface rounded-2xl p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isAvailable ? 'bg-success/15' : 'bg-neutral-800'}`}>
+              <Power size={18} className={isAvailable ? 'text-success' : 'text-neutral-500'} />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold">{isAvailable ? 'Disponible' : 'No disponible'}</p>
+              <p className="text-[11px] text-neutral-500">
+                {isAvailable ? 'Los clientes pueden contactarte' : 'No apareces en búsquedas'}
+              </p>
+            </div>
+            <button
+              onClick={async () => {
+                setTogglingAvail(true);
+                try {
+                  await api.patch('/profile', { isOnline: !isAvailable });
+                  setIsAvailable(!isAvailable);
+                } catch {}
+                setTogglingAvail(false);
+              }}
+              disabled={togglingAvail}
+              className={`relative w-12 h-7 rounded-full transition-colors ${isAvailable ? 'bg-success' : 'bg-neutral-700'}`}
+            >
+              <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${isAvailable ? 'left-[22px]' : 'left-0.5'}`} />
+            </button>
+          </div>
+        )}
+
         {/* Videocall config — professionals only */}
         {isPro && (
           <button
@@ -221,6 +253,21 @@ export function ProfileScreen() {
             <ChevronRight size={16} className="text-neutral-600" />
           </button>
         )}
+
+        {/* Session history */}
+        <button
+          onClick={() => navigate('/historial')}
+          className="w-full bg-surface hover:bg-surface-light rounded-2xl p-4 flex items-center gap-3 transition-colors"
+        >
+          <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center">
+            <Clock size={18} className="text-warning" />
+          </div>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-semibold">Historial de sesiones</p>
+            <p className="text-[11px] text-neutral-500">Videollamadas completadas</p>
+          </div>
+          <ChevronRight size={16} className="text-neutral-600" />
+        </button>
 
         {/* Gallery — professionals only */}
         {isPro && (

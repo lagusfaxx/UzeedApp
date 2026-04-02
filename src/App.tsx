@@ -18,6 +18,10 @@ import { BuyTokensScreen } from '@/screens/BuyTokensScreen';
 import { BookVideocallScreen } from '@/screens/BookVideocallScreen';
 import { DeleteAccountScreen } from '@/screens/DeleteAccountScreen';
 import { ReportScreen } from '@/screens/ReportScreen';
+import { FavoritesScreen } from '@/screens/FavoritesScreen';
+import { RateScreen } from '@/screens/RateScreen';
+import { NotificationsScreen } from '@/screens/NotificationsScreen';
+import { SessionHistoryScreen } from '@/screens/SessionHistoryScreen';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -38,6 +42,8 @@ function AppRoutes() {
         <Route path="/chat" element={<ChatInbox />} />
         <Route path="/lives" element={<LivesScreen />} />
         <Route path="/explorar" element={<DiscoverScreen />} />
+        <Route path="/favoritos" element={<FavoritesScreen />} />
+        <Route path="/notificaciones" element={<NotificationsScreen />} />
       </Route>
 
       {/* Full-screen screens (no bottom nav) */}
@@ -51,6 +57,8 @@ function AppRoutes() {
       <Route path="/lives/call/:bookingId" element={<VideocallScreen />} />
       <Route path="/eliminar-cuenta" element={<DeleteAccountScreen />} />
       <Route path="/reportar/:userId" element={<ReportScreen />} />
+      <Route path="/valorar/:bookingId" element={<RateScreen />} />
+      <Route path="/historial" element={<SessionHistoryScreen />} />
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to={defaultRoute} replace />} />

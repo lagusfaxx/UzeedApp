@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, MessageCircle, Video, Image, Flag } from "lucide-react";
+import { ArrowLeft, MapPin, MessageCircle, Video, Image, Flag, Heart } from "lucide-react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Profile {
   id: string;
@@ -46,9 +47,12 @@ export function ProfessionalViewScreen() {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
 
+  const { user } = useAuth();
   const [data, setData] = useState<ProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
 
   useEffect(() => {
     if (!username) return;
@@ -58,6 +62,12 @@ export function ProfessionalViewScreen() {
         setLoading(true);
         const res = await api.get<ProfileResponse>(`/profiles/${username}`);
         setData(res);
+        // Check if this professional is in favorites
+        api.get<{ favorites: { id: string }[] }>('/favorites')
+          .then(({ favorites }) => {
+            setIsFavorite(favorites.some((f) => f.id === res.profile.id));
+          })
+          .catch(() => {});
       } catch {
         setError("No se pudo cargar el perfil.");
       } finally {
@@ -113,6 +123,31 @@ export function ProfessionalViewScreen() {
         >
           <ArrowLeft className="h-5 w-5 text-white" />
         </button>
+
+        {/* Favorite button */}
+        {user?.profileType !== 'PROFESSIONAL' && (
+          <button
+            onClick={async () => {
+              if (favLoading || !data) return;
+              setFavLoading(true);
+              try {
+                if (isFavorite) {
+                  await api.delete(`/favorites/${data.profile.id}`);
+                  setIsFavorite(false);
+                } else {
+                  await api.post(`/favorites/${data.profile.id}`);
+                  setIsFavorite(true);
+                }
+              } catch {}
+              setFavLoading(false);
+            }}
+            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm"
+          >
+            <Heart
+              className={`h-5 w-5 ${isFavorite ? 'text-danger fill-danger' : 'text-white'}`}
+            />
+          </button>
+        )}
       </div>
 
       {/* Avatar overlapping cover */}

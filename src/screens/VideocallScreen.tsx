@@ -43,7 +43,7 @@ export function VideocallScreen() {
   }, [bookingId]);
 
   const handleEnd = () => {
-    navigate('/lives');
+    navigate(`/valorar/${bookingId}`, { replace: true });
   };
 
   if (error) {

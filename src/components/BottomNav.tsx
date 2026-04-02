@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, Wallet, MessageCircle, Radio, Search } from 'lucide-react';
+import { User, Wallet, MessageCircle, Radio, Search, Heart, Bell } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
@@ -39,10 +39,11 @@ export function BottomNav() {
         { path: '/billetera', icon: Wallet, label: 'Billetera' },
         { path: '/chat', icon: MessageCircle, label: 'Chat', badge: unread },
         { path: '/lives', icon: Radio, label: 'Lives' },
+        { path: '/notificaciones', icon: Bell, label: 'Alertas' },
       ]
     : [
         { path: '/explorar', icon: Search, label: 'Explorar' },
-        { path: '/billetera', icon: Wallet, label: 'Billetera' },
+        { path: '/favoritos', icon: Heart, label: 'Favoritos' },
         { path: '/chat', icon: MessageCircle, label: 'Chat', badge: unread },
         { path: '/lives', icon: Radio, label: 'Lives' },
         { path: '/perfil', icon: User, label: 'Perfil' },

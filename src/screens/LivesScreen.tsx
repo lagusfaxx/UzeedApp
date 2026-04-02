@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import type { LiveStream, VideocallBooking } from '@/lib/types';
 import {
   Radio, Video, Users, Play, PhoneCall, Calendar,
-  Clock, RefreshCw, Plus, Eye
+  Clock, RefreshCw, Plus, Eye, Star
 } from 'lucide-react';
 
 export function LivesScreen() {
@@ -190,6 +190,16 @@ export function LivesScreen() {
                       >
                         <PhoneCall size={16} />
                         Unirse a la llamada
+                      </button>
+                    )}
+
+                    {booking.status === 'COMPLETED' && (
+                      <button
+                        onClick={() => navigate(`/valorar/${booking.id}`)}
+                        className="w-full mt-3 bg-warning/15 hover:bg-warning/25 border border-warning/30 text-warning font-semibold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <Star size={16} />
+                        Valorar sesión
                       </button>
                     )}
                   </div>

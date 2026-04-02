@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import type { Conversation, Message } from '@/lib/types';
-import { MessageCircle, ArrowLeft, Send, Image, ChevronRight } from 'lucide-react';
+import { MessageCircle, ArrowLeft, Send, Image, ChevronRight, Zap } from 'lucide-react';
 
 export function ChatInbox() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -75,6 +75,14 @@ export function ChatInbox() {
   );
 }
 
+const QUICK_REPLIES = [
+  'Hola, ¿en qué te puedo ayudar?',
+  'Estoy disponible ahora',
+  'Agenda una videollamada conmigo',
+  'Gracias por tu mensaje',
+  'Te respondo en un momento',
+];
+
 export function ChatConversation() {
   const { userId } = useParams<{ userId: string }>();
   const { user: me } = useAuth();
@@ -84,6 +92,7 @@ export function ChatConversation() {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showQuickReplies, setShowQuickReplies] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
@@ -181,9 +190,35 @@ export function ChatConversation() {
         <div ref={bottomRef} />
       </div>
 
+      {/* Quick replies (professionals only) */}
+      {showQuickReplies && me?.profileType === 'PROFESSIONAL' && (
+        <div className="bg-surface border-t border-border px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
+          {QUICK_REPLIES.map((reply) => (
+            <button
+              key={reply}
+              onClick={() => {
+                setText(reply);
+                setShowQuickReplies(false);
+              }}
+              className="shrink-0 bg-primary/15 border border-primary/30 text-primary-light text-xs font-medium px-3 py-1.5 rounded-full"
+            >
+              {reply}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Input */}
       <div className="bg-surface border-t border-border safe-bottom">
         <div className="flex items-end gap-2 px-4 py-3">
+          {me?.profileType === 'PROFESSIONAL' && (
+            <button
+              onClick={() => setShowQuickReplies(!showQuickReplies)}
+              className={`shrink-0 p-2.5 rounded-full transition-colors ${showQuickReplies ? 'bg-primary/20 text-primary' : 'text-neutral-500'}`}
+            >
+              <Zap size={18} />
+            </button>
+          )}
           <input
             type="text"
             value={text}
