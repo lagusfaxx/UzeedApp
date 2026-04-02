@@ -6,7 +6,7 @@ import type { User } from '@/lib/types';
 import {
   LogOut, Camera, Save, MapPin, Phone, Mail, Briefcase,
   Edit3, X, Shield, Eye, Clock, Star, Image, Plus, Trash2,
-  Video, ChevronRight, Settings
+  Video, ChevronRight, Settings, FileText, AlertTriangle
 } from 'lucide-react';
 import { Camera as CapCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
@@ -315,6 +315,38 @@ export function ProfileScreen() {
             </button>
           </div>
         )}
+
+        {/* Account & Legal section */}
+        <div className="bg-surface rounded-2xl divide-y divide-border">
+          <a
+            href="https://api.uzeed.cl/legal/privacidad"
+            target="_blank"
+            rel="noopener"
+            className="flex items-center gap-3 px-4 py-3.5"
+          >
+            <Shield size={16} className="text-neutral-500 shrink-0" />
+            <span className="text-sm flex-1">Política de Privacidad</span>
+            <ChevronRight size={14} className="text-neutral-600" />
+          </a>
+          <a
+            href="https://api.uzeed.cl/legal/terminos"
+            target="_blank"
+            rel="noopener"
+            className="flex items-center gap-3 px-4 py-3.5"
+          >
+            <FileText size={16} className="text-neutral-500 shrink-0" />
+            <span className="text-sm flex-1">Términos de Servicio</span>
+            <ChevronRight size={14} className="text-neutral-600" />
+          </a>
+          <button
+            onClick={() => navigate('/eliminar-cuenta')}
+            className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
+          >
+            <AlertTriangle size={16} className="text-danger shrink-0" />
+            <span className="text-sm text-danger flex-1">Eliminar cuenta</span>
+            <ChevronRight size={14} className="text-neutral-600" />
+          </button>
+        </div>
       </div>
     </div>
   );

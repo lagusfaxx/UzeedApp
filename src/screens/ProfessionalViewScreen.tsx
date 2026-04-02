@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, MessageCircle, Video, Image } from "lucide-react";
+import { ArrowLeft, MapPin, MessageCircle, Video, Image, Flag } from "lucide-react";
 import { api } from "@/lib/api";
 
 interface Profile {
@@ -220,6 +220,14 @@ export function ProfessionalViewScreen() {
           >
             <Video className="h-5 w-5 text-[#7c3aed]" />
             Agendar videollamada
+          </button>
+
+          <button
+            onClick={() => navigate(`/reportar/${profile.id}`)}
+            className="flex items-center justify-center gap-2 py-2 text-xs text-neutral-500 active:text-neutral-300"
+          >
+            <Flag className="h-3.5 w-3.5" />
+            Reportar usuario
           </button>
         </div>
       </div>

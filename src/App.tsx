@@ -16,6 +16,8 @@ import { ProfessionalViewScreen } from '@/screens/ProfessionalViewScreen';
 import { VideocallConfigScreen } from '@/screens/VideocallConfigScreen';
 import { BuyTokensScreen } from '@/screens/BuyTokensScreen';
 import { BookVideocallScreen } from '@/screens/BookVideocallScreen';
+import { DeleteAccountScreen } from '@/screens/DeleteAccountScreen';
+import { ReportScreen } from '@/screens/ReportScreen';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -47,6 +49,8 @@ function AppRoutes() {
       <Route path="/lives/watch/:streamId" element={<LiveWatchScreen />} />
       <Route path="/lives/broadcast" element={<BroadcastScreen />} />
       <Route path="/lives/call/:bookingId" element={<VideocallScreen />} />
+      <Route path="/eliminar-cuenta" element={<DeleteAccountScreen />} />
+      <Route path="/reportar/:userId" element={<ReportScreen />} />
 
       {/* Default redirect */}
       <Route path="*" element={<Navigate to={defaultRoute} replace />} />

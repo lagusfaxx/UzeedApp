@@ -174,6 +174,20 @@ export function AuthScreen() {
         </div>
       </div>
 
+      {/* Legal links */}
+      <div className="text-center px-7 pb-1">
+        <p className="text-neutral-600 text-[11px] leading-relaxed">
+          Al continuar, aceptas nuestros{' '}
+          <a href="https://api.uzeed.cl/legal/terminos" target="_blank" rel="noopener" className="text-neutral-400 underline">
+            Términos de Servicio
+          </a>{' '}
+          y{' '}
+          <a href="https://api.uzeed.cl/legal/privacidad" target="_blank" rel="noopener" className="text-neutral-400 underline">
+            Política de Privacidad
+          </a>
+        </p>
+      </div>
+
       {/* Bottom indicator bar (iOS style) */}
       <div className="flex justify-center pb-2">
         <div className="w-32 h-1 rounded-full bg-white/10" />
