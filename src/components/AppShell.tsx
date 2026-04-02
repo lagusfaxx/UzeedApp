@@ -3,7 +3,7 @@ import { BottomNav } from './BottomNav';
 
 export function AppShell() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-white pb-16">
+    <div className="min-h-screen bg-neutral-950 text-white pb-20">
       <Outlet />
       <BottomNav />
     </div>

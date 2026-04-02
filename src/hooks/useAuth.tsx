@@ -2,11 +2,28 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import { api, ApiError } from '@/lib/api';
 import type { User } from '@/lib/types';
 
+type RegisterData = {
+  email: string;
+  password: string;
+  displayName: string;
+  username: string;
+  phone: string;
+  profileType: 'CLIENT' | 'PROFESSIONAL';
+  acceptTerms: boolean;
+  gender?: string;
+  birthdate?: string;
+  bio?: string;
+  city?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
 type AuthState = {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, displayName: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -36,9 +53,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await refresh();
   };
 
-  const register = async (email: string, password: string, displayName: string) => {
-    const data = await api.post<{ user: User }>('/auth/register', { email, password, displayName });
-    setUser(data.user);
+  const register = async (data: RegisterData) => {
+    const res = await api.post<{ user: User }>('/auth/register', data);
+    setUser(res.user);
     await refresh();
   };
 

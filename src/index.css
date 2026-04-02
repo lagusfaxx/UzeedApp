@@ -56,3 +56,22 @@ button, a, nav { -webkit-user-select: none; user-select: none; }
 input:focus {
   box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.3);
 }
+
+/* Slide up animation for bottom sheets */
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up { animation: slide-up 0.25s ease-out; }
+
+/* Safe area bottom padding utility */
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 8px); }
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Date input styling for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+}

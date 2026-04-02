@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import type { WalletData, TokenTransaction } from '@/lib/types';
 import {
   Wallet, ArrowUpRight, ArrowDownLeft, Clock, TrendingUp,
-  TrendingDown, RefreshCw, Receipt, CreditCard, ChevronDown, ChevronUp
+  TrendingDown, RefreshCw, Receipt, CreditCard, Plus
 } from 'lucide-react';
 
 export function WalletScreen() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const isPro = user?.profileType === 'PROFESSIONAL';
   const [wallet, setWallet] = useState<WalletData | null>(null);
   const [transactions, setTransactions] = useState<TokenTransaction[]>([]);
@@ -69,6 +71,17 @@ export function WalletScreen() {
             </div>
           )}
         </div>
+
+        {/* Buy tokens button (clients) / Withdraw button (pros) */}
+        {!isPro && (
+          <button
+            onClick={() => navigate('/comprar-tokens')}
+            className="w-full bg-gradient-to-r from-primary to-violet-500 text-white font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+          >
+            <Plus size={18} />
+            Comprar tokens
+          </button>
+        )}
 
         {/* Stats */}
         {wallet && (
