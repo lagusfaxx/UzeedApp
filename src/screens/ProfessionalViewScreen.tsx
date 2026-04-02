@@ -63,10 +63,8 @@ export function ProfessionalViewScreen() {
         const res = await api.get<ProfileResponse>(`/profiles/${username}`);
         setData(res);
         // Check if this professional is in favorites
-        api.get<{ favorites: { id: string }[] }>('/favorites')
-          .then(({ favorites }) => {
-            setIsFavorite(favorites.some((f) => f.id === res.profile.id));
-          })
+        api.get<{ isFavorite: boolean }>(`/favorites/check/${res.profile.id}`)
+          .then(({ isFavorite }) => setIsFavorite(isFavorite))
           .catch(() => {});
       } catch {
         setError("No se pudo cargar el perfil.");

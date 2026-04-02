@@ -7,7 +7,7 @@ interface AppNotification {
   type: string;
   title: string;
   body: string;
-  isRead: boolean;
+  readAt: string | null;
   createdAt: string;
   data?: Record<string, unknown>;
 }
@@ -52,7 +52,7 @@ export function NotificationsScreen() {
   const markAllRead = async () => {
     try {
       await api.post('/notifications/read-all');
-      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, readAt: new Date().toISOString() })));
     } catch {
       // Ignore
     }
@@ -62,14 +62,14 @@ export function NotificationsScreen() {
     try {
       await api.post(`/notifications/${id}/read`);
       setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+        prev.map((n) => (n.id === id ? { ...n, readAt: new Date().toISOString() } : n))
       );
     } catch {
       // Ignore
     }
   };
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.readAt).length;
 
   return (
     <div className="safe-top">
@@ -142,9 +142,9 @@ export function NotificationsScreen() {
               return (
                 <button
                   key={notif.id}
-                  onClick={() => !notif.isRead && markRead(notif.id)}
+                  onClick={() => !notif.readAt && markRead(notif.id)}
                   className={`w-full text-left bg-surface rounded-2xl p-4 flex items-start gap-3 transition-colors ${
-                    !notif.isRead ? 'border-l-2 border-primary' : ''
+                    !notif.readAt ? 'border-l-2 border-primary' : ''
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${colorClass}`}>
@@ -152,10 +152,10 @@ export function NotificationsScreen() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
-                      <p className={`text-sm font-medium ${!notif.isRead ? 'text-white' : 'text-neutral-300'}`}>
+                      <p className={`text-sm font-medium ${!notif.readAt ? 'text-white' : 'text-neutral-300'}`}>
                         {notif.title}
                       </p>
-                      {!notif.isRead && (
+                      {!notif.readAt && (
                         <span className="w-2 h-2 bg-primary rounded-full shrink-0 mt-1.5" />
                       )}
                     </div>

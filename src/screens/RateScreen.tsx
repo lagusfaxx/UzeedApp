@@ -27,13 +27,11 @@ export function RateScreen() {
     if (rating === 0) return;
     setLoading(true);
     try {
-      await api.post(`/services/${bookingId}/review`, {
+      await api.post(`/videocall/bookings/${bookingId}/review`, {
         hearts: rating,
         comment: comment.trim() || undefined,
+        tags: tags.length > 0 ? tags : undefined,
       });
-      if (tags.length > 0) {
-        await api.post(`/services/${bookingId}/review-tags`, { tags }).catch(() => {});
-      }
       setDone(true);
     } catch {
       setDone(true);
