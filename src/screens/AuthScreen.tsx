@@ -175,37 +175,6 @@ export function AuthScreen() {
     setTermsAccepted(false);
   };
 
-  // ── Input component ──
-  const Input = ({
-    icon: Icon, type = 'text', value, onChange, placeholder, autoComplete, maxLength,
-    right,
-  }: {
-    icon: any; type?: string; value: string; onChange: (v: string) => void;
-    placeholder: string; autoComplete?: string; maxLength?: number;
-    right?: React.ReactNode;
-  }) => (
-    <div className="relative">
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500">
-        <Icon size={18} />
-      </div>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        autoCapitalize={type === 'email' ? 'off' : 'sentences'}
-        maxLength={maxLength}
-        className="w-full bg-surface border border-border rounded-2xl pl-12 pr-12 py-4 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 transition-all"
-      />
-      {right && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-          {right}
-        </div>
-      )}
-    </div>
-  );
-
   // ── Render LOGIN ──
   if (mode === 'login') {
     const isLoginValid = loginEmail.length > 0 && loginPassword.length > 0;
@@ -644,6 +613,38 @@ export function AuthScreen() {
 }
 
 // ── Shared sub-components ──
+
+function Input({
+  icon: Icon, type = 'text', value, onChange, placeholder, autoComplete, maxLength,
+  right,
+}: {
+  icon: any; type?: string; value: string; onChange: (v: string) => void;
+  placeholder: string; autoComplete?: string; maxLength?: number;
+  right?: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500">
+        <Icon size={18} />
+      </div>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        autoCapitalize={type === 'email' ? 'off' : 'sentences'}
+        maxLength={maxLength}
+        className="w-full bg-surface border border-border rounded-2xl pl-12 pr-12 py-4 text-white text-[15px] placeholder:text-neutral-600 focus:outline-none focus:border-primary/50 transition-all"
+      />
+      {right && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          {right}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function ProfileTypeCard({ selected, onClick, title, desc }: {
   selected: boolean; onClick: () => void; title: string; desc: string;
