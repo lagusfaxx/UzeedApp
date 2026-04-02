@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { safeCategory } from '@/lib/categories';
 import { Search, MapPin, RefreshCw, Users } from 'lucide-react';
 
 interface DiscoverProfile {
@@ -154,7 +155,7 @@ export function DiscoverScreen() {
 
                   {profile.serviceCategory && (
                     <p className="text-xs text-primary mt-0.5 truncate">
-                      {profile.serviceCategory}
+                      {safeCategory(profile.serviceCategory)}
                     </p>
                   )}
 

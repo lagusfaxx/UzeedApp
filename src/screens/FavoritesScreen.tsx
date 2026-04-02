@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
+import { safeCategory } from '@/lib/categories';
 import { Heart, RefreshCw, Trash2, Star } from 'lucide-react';
 
 interface FavoriteEntry {
@@ -101,7 +102,7 @@ export function FavoritesScreen() {
                         <span className="w-2 h-2 bg-success rounded-full shrink-0" />
                       )}
                     </div>
-                    <p className="text-xs text-primary mt-0.5 truncate">{fav.professional.category}</p>
+                    <p className="text-xs text-primary mt-0.5 truncate">{safeCategory(fav.professional.category)}</p>
                     {fav.professional.rating != null && (
                       <div className="flex items-center gap-1 mt-0.5">
                         <Star size={10} className="text-warning fill-warning" />

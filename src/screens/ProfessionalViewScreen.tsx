@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, MessageCircle, Video, Image, Flag, Heart } from "lucide-react";
 import { api } from "@/lib/api";
+import { safeCategory } from "@/lib/categories";
 import { useAuth } from "@/hooks/useAuth";
 
 interface Profile {
@@ -180,7 +181,7 @@ export function ProfessionalViewScreen() {
         {/* Service category badge */}
         {profile.serviceCategory && (
           <span className="mt-3 inline-block rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
-            {profile.serviceCategory}
+            {safeCategory(profile.serviceCategory)}
           </span>
         )}
 

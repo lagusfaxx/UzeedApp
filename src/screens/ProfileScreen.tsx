@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { api, API_BASE } from '@/lib/api';
+import { safeCategory } from '@/lib/categories';
 import type { User } from '@/lib/types';
 import {
   LogOut, Camera, Save, MapPin, Phone, Mail, Briefcase,
@@ -204,7 +205,7 @@ export function ProfileScreen() {
           <InfoRow icon={Phone} label="Teléfono" value={displayUser?.phone || 'Sin registrar'} />
           <InfoRow icon={MapPin} label="Ciudad" value={displayUser?.city || 'Sin registrar'} />
           {isPro && (
-            <InfoRow icon={Briefcase} label="Categoría" value={displayUser?.serviceCategory || 'Sin definir'} />
+            <InfoRow icon={Briefcase} label="Categoría" value={safeCategory(displayUser?.serviceCategory) || 'Sin definir'} />
           )}
         </div>
 
